@@ -23,7 +23,7 @@
     "destr": "2.0.5",
     "effect": "3.19.14",
     "fast-equals": "6.0.0",
-    "hono": "4.11.5",
+    "hono": "4.12.9",
     "hono-openapi": "1.1.2",
     "hono-session": "1.2.0",
     "ofetch": "1.5.1",
