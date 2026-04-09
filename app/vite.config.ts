@@ -18,7 +18,6 @@ export default defineConfig({
         input: '../server/openapi.json',
         output: {
           path: 'src/client',
-          postProcess: ['eslint'], // Lint the generated files
         },
         plugins: [
           '@hey-api/typescript',

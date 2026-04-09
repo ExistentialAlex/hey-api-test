@@ -1,6 +1,7 @@
+import { combine, ignores } from '@antfu/eslint-config';
 import { vueConfig } from 'hey-api-test-eslint-config';
 
-export default vueConfig.override('antfu/vue/rules', {
+const baseConfig = await vueConfig.override('antfu/vue/rules', {
   rules: {
     'vue/multi-word-component-names': 'off',
     'vue/html-self-closing': [
@@ -13,3 +14,5 @@ export default vueConfig.override('antfu/vue/rules', {
     ],
   },
 });
+
+export default combine(baseConfig, ignores(['./src/client/**']));
