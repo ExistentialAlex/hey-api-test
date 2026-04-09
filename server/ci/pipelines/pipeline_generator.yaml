@@ -7,81 +7,81 @@ resource_types:
       tag: 1.4.2
       username: _json_key
       password: |
-        ((<platform-keyfile-name>.keyfile))
+        ((hey-api-test-keyfile.keyfile))
 
 resources:
-  - name: <project-name>-server
+  - name: hey-api-test-server
     type: git
     icon: github
-    webhook_token: ((<project-name>-server-webhook-token))
+    webhook_token: ((hey-api-test-server-webhook-token))
     source:
-      uri: https://github.com/sky-uk/<repository-name>
+      uri: https://github.com/sky-uk/hey-api-test
       paths:
         - server
       branch: main
       fetch_tags: true
       username: svc-adtech-cicd-bot
       password: ((github_pat))
-  - name: <project-name>-server-webhook
+  - name: hey-api-test-server-webhook
     type: github-webhook-resource
     source:
       github_api: https://api.github.com
       github_token: ((github_pat))
-  - name: <project-name>-server-pr-webhook
+  - name: hey-api-test-server-pr-webhook
     type: github-webhook-resource
     source:
       github_api: https://api.github.com
       github_token: ((github_pat))
-  - name: <project-name>-server-self-webhook
+  - name: hey-api-test-server-self-webhook
     type: github-webhook-resource
     source:
       github_api: https://api.github.com
       github_token: ((github_pat))
 
 jobs:
-  - name: <project-name>-server-set-self
+  - name: hey-api-test-server-set-self
     plan:
-      - get: <project-name>-server
+      - get: hey-api-test-server
         trigger: true
-      - set_pipeline: <project-name>-server-generator
-        file: <project-name>-server/server/ci/pipelines/pipeline_generator.yaml
+      - set_pipeline: hey-api-test-server-generator
+        file: hey-api-test-server/server/ci/pipelines/pipeline_generator.yaml
       - put: create-webhook
-        resource: <project-name>-server-self-webhook
+        resource: hey-api-test-server-self-webhook
         params:
           org: sky-uk
-          repo: <repository-name>
-          resource_name: <project-name>-server
-          webhook_token: ((<project-name>-server-webhook-token))
+          repo: hey-api-test
+          resource_name: hey-api-test-server
+          webhook_token: ((hey-api-test-server-webhook-token))
           operation: create
           events: [push]
-          pipeline: <project-name>-server-generator
+          pipeline: hey-api-test-server-generator
 
-  - name: <project-name>-server-pipelines
+  - name: hey-api-test-server-pipelines
     plan:
-      - get: <project-name>-server
+      - get: hey-api-test-server
         trigger: true
-        passed: [<project-name>-server-set-self]
-      - set_pipeline: <project-name>-server-pr
-        file: <project-name>-server/server/ci/pipelines/check.yaml
-      - set_pipeline: <project-name>-server-deploy
-        file: <project-name>-server/server/ci/pipelines/deploy.yaml
+        passed: [hey-api-test-server-set-self]
+      - set_pipeline: hey-api-test-server-pr
+        file: hey-api-test-server/server/ci/pipelines/check.yaml
+      - set_pipeline: hey-api-test-server-deploy
+        file: hey-api-test-server/server/ci/pipelines/deploy.yaml
       - put: create-webhook
-        resource: <project-name>-server-webhook
+        resource: hey-api-test-server-webhook
         params:
           org: sky-uk
-          repo: <repository-name>
-          resource_name: <project-name>-server
-          webhook_token: ((<project-name>-server-webhook-token))
+          repo: hey-api-test
+          resource_name: hey-api-test-server
+          webhook_token: ((hey-api-test-server-webhook-token))
           operation: create
           events: [push]
-          pipeline: <project-name>-server-deploy
+          pipeline: hey-api-test-server-deploy
       - put: create-webhook-pr
-        resource: <project-name>-server-pr-webhook
+        resource: hey-api-test-server-pr-webhook
         params:
           org: sky-uk
-          repo: <repository-name>
-          resource_name: <project-name>-server-pr
-          webhook_token: ((<project-name>-server-webhook-token))
+          repo: hey-api-test
+          resource_name: hey-api-test-server-pr
+          webhook_token: ((hey-api-test-server-webhook-token))
           operation: create
           events: [pull_request]
-          pipeline: <project-name>-server-pr
+          pipeline: hey-api-test-server-pr

@@ -1,7 +1,7 @@
-import type { CreateUser, UpdateUser } from '<project-name>-schemas';
+import type { CreateUser, UpdateUser } from 'hey-api-test-schemas';
 import type { Context } from 'hono';
-import { doublet } from '<project-name>-utils';
 import { $fetchMock } from '@mocks/ofetch.mock';
+import { doublet } from 'hey-api-test-utils';
 import { FetchError } from 'ofetch';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { UserGetException, UserNotFoundException } from '@/exceptions';

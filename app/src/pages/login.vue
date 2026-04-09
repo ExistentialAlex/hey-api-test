@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Auth } from '<project-name>-schemas';
-import { AuthSchema } from '<project-name>-schemas';
-import { asFetchError, doublet } from '<project-name>-utils';
+import type { Auth } from 'hey-api-test-schemas';
+import { AuthSchema } from 'hey-api-test-schemas';
+import { asFetchError, doublet } from 'hey-api-test-utils';
 import { definePage } from 'unplugin-vue-router/runtime';
 import { reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';

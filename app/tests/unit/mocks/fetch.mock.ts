@@ -1,4 +1,4 @@
-import type { DeepPartial } from '<project-name>-types';
+import type { DeepPartial } from 'hey-api-test-types';
 import type { FetchOptions } from 'ofetch';
 import defu from 'defu';
 import { vi } from 'vitest';

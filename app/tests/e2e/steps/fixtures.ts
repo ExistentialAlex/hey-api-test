@@ -1,5 +1,5 @@
-import type { MessageSchema } from '<project-name>-i18n';
-import type { ShapeOf } from '<project-name>-types';
+import type { MessageSchema } from 'hey-api-test-i18n';
+import type { ShapeOf } from 'hey-api-test-types';
 import { test as base, createBdd } from 'playwright-bdd';
 import { i18nFixture, LoginPage } from '@/fixtures';
 

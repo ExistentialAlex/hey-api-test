@@ -1,4 +1,4 @@
-import type { Enum } from '<project-name>-types';
+import type { Enum } from 'hey-api-test-types';
 import type { StatusCode } from 'hono/utils/http-status';
 
 export const PrefixEnum = {

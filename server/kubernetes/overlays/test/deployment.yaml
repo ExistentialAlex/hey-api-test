@@ -2,15 +2,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <platform-team-name>-server
+  name: hey-api-test-server
 spec:
   template:
     metadata:
       annotations:
     spec:
       containers:
-        - name: <platform-team-name>-server
-          image: europe-west1-docker.pkg.dev/uk-cti-adtech-platform-test/<platform-team-name>/<platform-team-name>-server:${GIT_TAG}
+        - name: hey-api-test-server
+          image: europe-west1-docker.pkg.dev/uk-cti-adtech-platform-test/hey-api-test/hey-api-test-server:${GIT_TAG}
           env:
             - name: VITE_UI_URL
-              value: https://<platform-team-name>-app.internal.test.adtechplatform.sky.com
+              value: https://hey-api-test-app.internal.test.adtechplatform.sky.com

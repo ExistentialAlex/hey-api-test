@@ -2,12 +2,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <platform-team-name>-server
+  name: hey-api-test-server
 spec:
   template:
     metadata:
       annotations:
     spec:
       containers:
-        - name: <platform-team-name>-server
-          image: europe-west1-docker.pkg.dev/uk-cti-adtech-platform-prod/<platform-team-name>/<platform-team-name>-server:${GIT_TAG}
+        - name: hey-api-test-server
+          image: europe-west1-docker.pkg.dev/uk-cti-adtech-platform-prod/hey-api-test/hey-api-test-server:${GIT_TAG}

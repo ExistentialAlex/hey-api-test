@@ -4,7 +4,7 @@ import {
   GetUserSchema,
   PaginationQuerySchema,
   UpdateUserSchema,
-} from '<project-name>-schemas';
+} from 'hey-api-test-schemas';
 import { Hono } from 'hono';
 import { requireUserSession, zValidator } from '@/middleware';
 import { useUserService } from '@/services';

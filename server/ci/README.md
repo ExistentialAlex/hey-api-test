@@ -1,4 +1,4 @@
-# <project-name>-server CI/CD
+# hey-api-test-server CI/CD
 
 ## CI and Deployment Description
 

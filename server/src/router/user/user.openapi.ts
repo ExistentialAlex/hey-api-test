@@ -1,4 +1,4 @@
-import { PaginationResponseSchema, UserSchema } from '<project-name>-schemas';
+import { PaginationResponseSchema, UserSchema } from 'hey-api-test-schemas';
 import { describeRoute, resolver } from 'hono-openapi';
 import z from 'zod';
 

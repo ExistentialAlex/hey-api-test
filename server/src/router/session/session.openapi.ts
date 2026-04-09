@@ -1,4 +1,4 @@
-import { UserSessionSchema } from '<project-name>-schemas';
+import { UserSessionSchema } from 'hey-api-test-schemas';
 import { describeRoute, resolver } from 'hono-openapi';
 import z from 'zod';
 

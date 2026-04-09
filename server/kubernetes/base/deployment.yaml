@@ -2,17 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <platform-team-name>-server
+  name: hey-api-test-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: <platform-team-name>-server
+      app: hey-api-test-server
   template:
     metadata:
       annotations:
       labels:
-        app: <platform-team-name>-server
+        app: hey-api-test-server
     spec:
       topologySpreadConstraints:
         - maxSkew: 1
@@ -20,16 +20,16 @@ spec:
           whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
-              app: <platform-team-name>
+              app: hey-api-test
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
           whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
-              app: <platform-team-name>-server
+              app: hey-api-test-server
       containers:
-        - name: <platform-team-name>-server
-          image: europe-west1-docker.pkg.dev/uk-cti-adtech-platform-test/<platform-team-name>/<platform-team-name>-server:${GIT_TAG}
+        - name: hey-api-test-server
+          image: europe-west1-docker.pkg.dev/uk-cti-adtech-platform-test/hey-api-test/hey-api-test-server:${GIT_TAG}
           imagePullPolicy: Always
           securityContext:
             readOnlyRootFilesystem: true

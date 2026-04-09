@@ -1,5 +1,5 @@
 /* eslint-disable antfu/no-top-level-await */
-import { doublet } from '<project-name>-utils';
+import { doublet } from 'hey-api-test-utils';
 import { ofetch } from 'ofetch';
 import { computed } from 'vue';
 

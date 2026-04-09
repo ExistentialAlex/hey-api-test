@@ -1,8 +1,8 @@
 pr_failure_update: &pr_failure_update
   put: mark-pr-check-as-failed
-  resource: <project-name>-server-pr
+  resource: hey-api-test-server-pr
   params:
-    path: <project-name>-server-pr
+    path: hey-api-test-server-pr
     status: failure
     context: bff-pr-check
 
@@ -14,16 +14,16 @@ resource_types:
       tag: v0.23.0
       username: _json_key
       password: |
-        ((<platform-keyfile-name>.keyfile))
+        ((hey-api-test-keyfile.keyfile))
 
 resources:
-  - name: <project-name>-server-pr
+  - name: hey-api-test-server-pr
     icon: github
     type: pull-request
-    webhook_token: ((<project-name>-server-webhook-token))
+    webhook_token: ((hey-api-test-server-webhook-token))
     source:
       base_branch: main
-      repository: sky-uk/<repository-name>
+      repository: sky-uk/hey-api-test
       access_token: ((github_pat))
       paths:
         - server
@@ -36,78 +36,78 @@ jobs:
   - name: bff-pr-check
     serial: true
     plan:
-      - get: <project-name>-server-pr
+      - get: hey-api-test-server-pr
         trigger: true
-      - put: <project-name>-server-pr
+      - put: hey-api-test-server-pr
         params:
-          path: <project-name>-server-pr
+          path: hey-api-test-server-pr
           status: pending
           context: bff-pr-check
       - load_var: pr_commit_sha
-        file: <project-name>-server-pr/.git/resource/head_sha
+        file: hey-api-test-server-pr/.git/resource/head_sha
       - in_parallel:
           - task: unit-tests
             privileged: true
-            file: <project-name>-server-pr/server/ci/pipelines/tasks/run-tests.yaml
+            file: hey-api-test-server-pr/server/ci/pipelines/tasks/run-tests.yaml
             vars:
-              repo_name: <project-name>-server-pr
+              repo_name: hey-api-test-server-pr
               gcp_sa_name: concourse-ui-bff@grp-cti-adtech-adf-test.iam.gserviceaccount.com
               git_tag: ((.:pr_commit_sha))
               target_env: test
               make_target: unit-tests
-              gcp_sa_key_secret_path: ((<platform-keyfile-name>.keyfile))
+              gcp_sa_key_secret_path: ((hey-api-test-keyfile.keyfile))
               github_pat_token_secret_name: ((github_pat))
           - task: e2e-tests
             privileged: true
-            file: <project-name>-server-pr/server/ci/pipelines/tasks/run-tests.yaml
+            file: hey-api-test-server-pr/server/ci/pipelines/tasks/run-tests.yaml
             vars:
-              repo_name: <project-name>-server-pr
+              repo_name: hey-api-test-server-pr
               gcp_sa_name: concourse-ui-bff@grp-cti-adtech-adf-test.iam.gserviceaccount.com
               git_tag: ((.:pr_commit_sha))
               target_env: test
               make_target: mock-command
-              gcp_sa_key_secret_path: ((<platform-keyfile-name>.keyfile))
+              gcp_sa_key_secret_path: ((hey-api-test-keyfile.keyfile))
               github_pat_token_secret_name: ((github_pat))
           - task: lint
             privileged: true
-            file: <project-name>-server-pr/server/ci/pipelines/tasks/run-tests.yaml
+            file: hey-api-test-server-pr/server/ci/pipelines/tasks/run-tests.yaml
             vars:
-              repo_name: <project-name>-server-pr
+              repo_name: hey-api-test-server-pr
               gcp_sa_name: concourse-ui-bff@grp-cti-adtech-adf-test.iam.gserviceaccount.com
               git_tag: ((.:pr_commit_sha))
               target_env: test
               make_target: lint
-              gcp_sa_key_secret_path: ((<platform-keyfile-name>.keyfile))
+              gcp_sa_key_secret_path: ((hey-api-test-keyfile.keyfile))
               github_pat_token_secret_name: ((github_pat))
           - task: format
             privileged: true
-            file: <project-name>-server-pr/server/ci/pipelines/tasks/run-tests.yaml
+            file: hey-api-test-server-pr/server/ci/pipelines/tasks/run-tests.yaml
             vars:
-              repo_name: <project-name>-server-pr
+              repo_name: hey-api-test-server-pr
               gcp_sa_name: concourse-ui-bff@grp-cti-adtech-adf-test.iam.gserviceaccount.com
               git_tag: ((.:pr_commit_sha))
               target_env: test
               make_target: check-format
-              gcp_sa_key_secret_path: ((<platform-keyfile-name>.keyfile))
+              gcp_sa_key_secret_path: ((hey-api-test-keyfile.keyfile))
               github_pat_token_secret_name: ((github_pat))
       - task: docker-build
         privileged: true
-        file: <project-name>-server-pr/server/ci/pipelines/tasks/build-image.yaml
+        file: hey-api-test-server-pr/server/ci/pipelines/tasks/build-image.yaml
         vars:
-          repo_name: <project-name>-server-pr
-          context: <project-name>-server-pr
+          repo_name: hey-api-test-server-pr
+          context: hey-api-test-server-pr
           target: server
       - task: docker-push
-        file: <project-name>-server-pr/server/ci/pipelines/tasks/push-image.yaml
+        file: hey-api-test-server-pr/server/ci/pipelines/tasks/push-image.yaml
         vars:
-          repo_name: <project-name>-server-pr
-          google_json_credentials: ((<platform-keyfile-name>.keyfile))
-          target_image: europe-west1-docker.pkg.dev/uk-cti-adtech-platform-test/<platform-team-name>/<platform-team-name>-server
+          repo_name: hey-api-test-server-pr
+          google_json_credentials: ((hey-api-test-keyfile.keyfile))
+          target_image: europe-west1-docker.pkg.dev/uk-cti-adtech-platform-test/hey-api-test/hey-api-test-server
     on_success:
       put: mark-pr-check-as-successful
-      resource: <project-name>-server-pr
+      resource: hey-api-test-server-pr
       params:
-        path: <project-name>-server-pr
+        path: hey-api-test-server-pr
         status: success
         context: bff-pr-check
     on_failure: *pr_failure_update

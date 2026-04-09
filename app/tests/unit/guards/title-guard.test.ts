@@ -20,8 +20,8 @@ describe('title Guard', () => {
     titleGuard(to);
 
     // Assert
-    expect(useTitleMock).toHaveBeenCalledWith('<project-name>', {
-      titleTemplate: '%s | <project-name>',
+    expect(useTitleMock).toHaveBeenCalledWith('hey-api-test', {
+      titleTemplate: '%s | hey-api-test',
     });
   });
 
@@ -42,7 +42,7 @@ describe('title Guard', () => {
 
     // Assert
     expect(useTitleMock).toHaveBeenCalledWith('User \'1\' has been created.', {
-      titleTemplate: '%s | <project-name>',
+      titleTemplate: '%s | hey-api-test',
     });
   });
 });

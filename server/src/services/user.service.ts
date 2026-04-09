@@ -1,10 +1,10 @@
+import type { ServerEnv } from '@env';
 import type {
   CreateUser,
   PaginationResponse,
   UpdateUser,
   User,
-} from '<project-name>-schemas';
-import type { ServerEnv } from '@env';
+} from 'hey-api-test-schemas';
 import type { Context } from 'hono';
 import { UserGetException, UserNotFoundException } from '@/exceptions';
 import { convertExternalPaginationResponse, log, paginate } from '../utils';

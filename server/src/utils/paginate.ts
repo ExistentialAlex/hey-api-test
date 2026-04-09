@@ -2,9 +2,9 @@
 import type {
   ExternalPaginationResponseSchema,
   PaginationResponseSchema,
-} from '<project-name>-schemas';
+} from 'hey-api-test-schemas';
 import type { Context } from 'hono';
-import { appendQueryAndHash } from '<project-name>-utils';
+import { appendQueryAndHash } from 'hey-api-test-utils';
 
 export const paginate = <T>(
   dataset: T[],

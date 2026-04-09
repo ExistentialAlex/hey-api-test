@@ -1,5 +1,5 @@
-import type { Callback } from '<project-name>-utils';
 import type { ButtonProps } from '@nuxt/ui';
+import type { Callback } from 'hey-api-test-utils';
 import { useI18n } from 'vue-i18n';
 import { useActionModal } from './useActionModal';
 

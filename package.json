@@ -1,5 +1,5 @@
 {
-  "name": "<project-name>",
+  "name": "hey-api-test",
   "type": "module",
   "version": "0.0.0",
   "private": true,
@@ -14,7 +14,7 @@
     "build": "pnpm run -r build",
     "test:unit": "vitest run --coverage",
     "test:watch": "vitest --coverage",
-    "test:e2e": "pnpm run -F <project-name>-app test:e2e",
+    "test:e2e": "pnpm run -F hey-api-test-app test:e2e",
     "prepare": "husky",
     "lint": "pnpm run -r lint",
     "lint:fix": "pnpm run -r lint:fix",

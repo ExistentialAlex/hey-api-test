@@ -1,4 +1,4 @@
-import type { ColumnSort } from '<project-name>-types';
+import type { ColumnSort } from 'hey-api-test-types';
 import { describe, expect, it } from 'vitest';
 import { convertQuerySortToColumnSort, convertSortToQuerySort } from '../src/sorting.util';
 

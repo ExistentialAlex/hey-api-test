@@ -1,5 +1,5 @@
-import type { PaginationResponseSchema } from '<project-name>-schemas';
-import { appendQueryAndHash } from '<project-name>-utils';
+import type { PaginationResponseSchema } from 'hey-api-test-schemas';
+import { appendQueryAndHash } from 'hey-api-test-utils';
 
 export const updatePaginatedUrls = <T>(
   data: PaginationResponseSchema<T>,

@@ -1,4 +1,4 @@
-# <project-name>-ui CI/CD
+# hey-api-test-ui CI/CD
 
 ## CI and Deployment
 

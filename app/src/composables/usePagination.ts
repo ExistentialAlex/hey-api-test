@@ -1,14 +1,14 @@
-import type { PaginationQuery, PaginationResponse } from '<project-name>-schemas';
-import type { ColumnSort } from '<project-name>-types';
 import type { EntryKey, UseQueryOptions } from '@pinia/colada';
+import type { PaginationQuery, PaginationResponse } from 'hey-api-test-schemas';
+import type { ColumnSort } from 'hey-api-test-types';
+import { useQuery } from '@pinia/colada';
+import { useDebounceFn } from '@vueuse/core';
 import {
   addProperty,
   convertQuerySortToColumnSort,
   convertSortToQuerySort,
   filterKeys,
-} from '<project-name>-utils';
-import { useQuery } from '@pinia/colada';
-import { useDebounceFn } from '@vueuse/core';
+} from 'hey-api-test-utils';
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useFetch } from '@/core';

@@ -1,5 +1,5 @@
-import { AuthSchema } from '<project-name>-schemas';
 import { useTranslation } from '@intlify/hono';
+import { AuthSchema } from 'hey-api-test-schemas';
 import { Hono } from 'hono';
 import { zValidator } from '@/middleware';
 import { LoginOpenApi } from './auth.openapi';

@@ -9,7 +9,7 @@ export default mergeConfig(
     build: {
       lib: {
         entry: resolve(__dirname, 'src/index.ts'),
-        name: '<project-name>_schemas',
+        name: 'hey-api-test_schemas',
       },
       // Rollup conf
       rollupOptions: {

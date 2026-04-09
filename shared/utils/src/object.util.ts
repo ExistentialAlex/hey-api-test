@@ -1,4 +1,4 @@
-import type { KeyOfLoose } from '<project-name>-types';
+import type { KeyOfLoose } from 'hey-api-test-types';
 
 export const addProperty = <T extends object>(
   obj: T,

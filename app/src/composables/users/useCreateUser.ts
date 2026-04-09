@@ -1,4 +1,4 @@
-import type { CreateUser, User } from '<project-name>-schemas';
+import type { CreateUser, User } from 'hey-api-test-schemas';
 import type { FetchError } from 'ofetch';
 import type { MaybeRefOrGetter } from 'vue';
 import { useMutation } from '@pinia/colada';
