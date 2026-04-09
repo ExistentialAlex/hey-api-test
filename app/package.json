@@ -13,7 +13,8 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "openapi-ts": "openapi-ts"
   },
   "dependencies": {
     "<project-name>-i18n": "workspace:^",

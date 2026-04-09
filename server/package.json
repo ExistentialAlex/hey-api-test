@@ -9,13 +9,10 @@
     "start": "node dist/index.js",
     "test:unit": "vitest run --coverage",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "openapi:generate": "tsx --tsconfig ./tsconfig.app.json scripts/openapi.ts"
   },
   "dependencies": {
-    "<project-name>-i18n": "workspace:^",
-    "<project-name>-schemas": "workspace:^",
-    "<project-name>-types": "workspace:^",
-    "<project-name>-utils": "workspace:^",
     "@hono/node-server": "1.19.2",
     "@hono/standard-validator": "0.2.2",
     "@intlify/hono": "2.0.0",
@@ -40,6 +37,7 @@
     "zod-to-json-schema": "3.25.1"
   },
   "devDependencies": {
+    "<project-name>-eslint-config": "workspace:^",
     "@eslint/js": "9.39.2",
     "@hono/swagger-ui": "0.5.3",
     "@hono/vite-build": "1.9.2",
