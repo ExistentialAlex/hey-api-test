@@ -2,15 +2,7 @@
 
 import type { FetchOptions as OfetchOptions, ResponseType as OfetchResponseType } from 'ofetch';
 
-import { getAuthToken } from '../core/auth.gen';
 import type { QuerySerializerOptions } from '../core/bodySerializer.gen';
-import { jsonBodySerializer } from '../core/bodySerializer.gen';
-import {
-  serializeArrayParam,
-  serializeObjectParam,
-  serializePrimitiveParam,
-} from '../core/pathSerializer.gen';
-import { getUrl } from '../core/utils.gen';
 import type {
   Client,
   ClientOptions,
@@ -19,6 +11,14 @@ import type {
   ResolvedRequestOptions,
   ResponseStyle,
 } from './types.gen';
+import { getAuthToken } from '../core/auth.gen';
+import { jsonBodySerializer } from '../core/bodySerializer.gen';
+import {
+  serializeArrayParam,
+  serializeObjectParam,
+  serializePrimitiveParam,
+} from '../core/pathSerializer.gen';
+import { getUrl } from '../core/utils.gen';
 
 export const createQuerySerializer = <T = unknown>({
   parameters = {},
@@ -45,8 +45,9 @@ export const createQuerySerializer = <T = unknown>({
             value,
             ...options.array,
           });
-          if (serializedArray) search.push(serializedArray);
-        } else if (typeof value === 'object') {
+          if (serializedArray) { search.push(serializedArray); }
+        }
+        else if (typeof value === 'object') {
           const serializedObject = serializeObjectParam({
             allowReserved: options.allowReserved,
             explode: true,
@@ -55,14 +56,15 @@ export const createQuerySerializer = <T = unknown>({
             value: value as Record<string, unknown>,
             ...options.object,
           });
-          if (serializedObject) search.push(serializedObject);
-        } else {
+          if (serializedObject) { search.push(serializedObject); }
+        }
+        else {
           const serializedPrimitive = serializePrimitiveParam({
             allowReserved: options.allowReserved,
             name,
             value: value as string,
           });
-          if (serializedPrimitive) search.push(serializedPrimitive);
+          if (serializedPrimitive) { search.push(serializedPrimitive); }
         }
       }
     }
@@ -104,8 +106,6 @@ export const getParseAs = (contentType: string | null): Exclude<Config['parseAs'
   if (cleanContent.startsWith('text/')) {
     return 'text';
   }
-
-  return;
 };
 
 /**
@@ -115,7 +115,7 @@ export const mapParseAsToResponseType = (
   parseAs: Config['parseAs'] | undefined,
   explicit?: OfetchResponseType,
 ): OfetchResponseType | undefined => {
-  if (explicit) return explicit;
+  if (explicit) { return explicit; }
   switch (parseAs) {
     case 'arrayBuffer':
     case 'blob':
@@ -140,9 +140,9 @@ const checkForExistence = (
     return false;
   }
   if (
-    options.headers.has(name) ||
-    options.query?.[name] ||
-    options.headers.get('Cookie')?.includes(`${name}=`)
+    options.headers.has(name)
+    || options.query?.[name]
+    || options.headers.get('Cookie')?.includes(`${name}=`)
   ) {
     return true;
   }
@@ -152,8 +152,8 @@ const checkForExistence = (
 export const setAuthParams = async ({
   security,
   ...options
-}: Pick<Required<RequestOptions>, 'security'> &
-  Pick<RequestOptions, 'auth' | 'query'> & {
+}: Pick<Required<RequestOptions>, 'security'>
+  & Pick<RequestOptions, 'auth' | 'query'> & {
     headers: Headers;
   }) => {
   for (const auth of security) {
@@ -230,11 +230,13 @@ export const mergeHeaders = (
     for (const [key, value] of iterator) {
       if (value === null) {
         mergedHeaders.delete(key);
-      } else if (Array.isArray(value)) {
+      }
+      else if (Array.isArray(value)) {
         for (const v of value) {
           mergedHeaders.append(key, v as string);
         }
-      } else if (value !== undefined) {
+      }
+      else if (value !== undefined) {
         // assume object headers are meant to be JSON stringified, i.e., their
         // content value in OpenAPI specification is 'application/json'
         mergedHeaders.set(
@@ -251,15 +253,15 @@ export const mergeHeaders = (
  * Heuristic to detect whether a request body can be safely retried.
  */
 export const isRepeatableBody = (body: unknown): boolean => {
-  if (body == null) return true; // undefined/null treated as no-body
-  if (typeof body === 'string') return true;
-  if (typeof URLSearchParams !== 'undefined' && body instanceof URLSearchParams) return true;
-  if (typeof Uint8Array !== 'undefined' && body instanceof Uint8Array) return true;
-  if (typeof ArrayBuffer !== 'undefined' && body instanceof ArrayBuffer) return true;
-  if (typeof Blob !== 'undefined' && body instanceof Blob) return true;
-  if (typeof FormData !== 'undefined' && body instanceof FormData) return true;
+  if (body == null) { return true; } // undefined/null treated as no-body
+  if (typeof body === 'string') { return true; }
+  if (typeof URLSearchParams !== 'undefined' && body instanceof URLSearchParams) { return true; }
+  if (typeof Uint8Array !== 'undefined' && body instanceof Uint8Array) { return true; }
+  if (typeof ArrayBuffer !== 'undefined' && body instanceof ArrayBuffer) { return true; }
+  if (typeof Blob !== 'undefined' && body instanceof Blob) { return true; }
+  if (typeof FormData !== 'undefined' && body instanceof FormData) { return true; }
   // Streams are not repeatable
-  if (typeof ReadableStream !== 'undefined' && body instanceof ReadableStream) return false;
+  if (typeof ReadableStream !== 'undefined' && body instanceof ReadableStream) { return false; }
   // Default: assume non-repeatable for unknown structured bodies
   return false;
 };
@@ -331,9 +333,9 @@ export const parseSuccess = async (
     return response.body;
   }
 
-  const inferredParseAs =
-    (opts.parseAs === 'auto' ? getParseAs(response.headers.get('Content-Type')) : opts.parseAs) ??
-    'json';
+  const inferredParseAs
+    = (opts.parseAs === 'auto' ? getParseAs(response.headers.get('Content-Type')) : opts.parseAs)
+      ?? 'json';
 
   // Handle empty responses
   if (response.status === 204 || response.headers.get('Content-Length') === '0') {
@@ -367,7 +369,8 @@ export const parseSuccess = async (
         const txt = await response.clone().text();
         if (!txt) {
           data = {};
-        } else {
+        }
+        else {
           data = await (response as any).json();
         }
         break;
@@ -398,7 +401,8 @@ export const parseError = async (response: Response): Promise<unknown> => {
     const textError = await response.text();
     try {
       error = JSON.parse(textError);
-    } catch {
+    }
+    catch {
       error = textError;
     }
   }

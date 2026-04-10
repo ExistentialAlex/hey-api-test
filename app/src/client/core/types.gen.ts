@@ -3,16 +3,16 @@
 import type { Auth, AuthToken } from './auth.gen';
 import type { BodySerializer, QuerySerializer, QuerySerializerOptions } from './bodySerializer.gen';
 
-export type HttpMethod =
-  | 'connect'
-  | 'delete'
-  | 'get'
-  | 'head'
-  | 'options'
-  | 'patch'
-  | 'post'
-  | 'put'
-  | 'trace';
+export type HttpMethod
+  = | 'connect'
+    | 'delete'
+    | 'get'
+    | 'head'
+    | 'options'
+    | 'patch'
+    | 'post'
+    | 'put'
+    | 'trace';
 
 export type Client<
   RequestFn = never,
@@ -52,9 +52,9 @@ export interface Config {
   headers?:
     | RequestInit['headers']
     | Record<
-        string,
+      string,
         string | number | boolean | (string | number | boolean)[] | null | undefined | unknown
-      >;
+    >;
   /**
    * The request method.
    *
@@ -94,10 +94,10 @@ export interface Config {
 type IsExactlyNeverOrNeverUndefined<T> = [T] extends [never]
   ? true
   : [T] extends [never | undefined]
-    ? [undefined] extends [T]
-      ? false
-      : true
-    : false;
+      ? [undefined] extends [T]
+          ? false
+          : true
+      : false;
 
 export type OmitNever<T extends Record<string, unknown>> = {
   [K in keyof T as IsExactlyNeverOrNeverUndefined<T[K]> extends true ? never : K]: T[K];

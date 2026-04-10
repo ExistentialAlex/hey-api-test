@@ -1,4 +1,4 @@
-import { combine, ignores } from '@antfu/eslint-config';
+import { combine } from '@antfu/eslint-config';
 import { vueConfig } from 'hey-api-test-eslint-config';
 
 const baseConfig = await vueConfig.override('antfu/vue/rules', {
@@ -15,4 +15,10 @@ const baseConfig = await vueConfig.override('antfu/vue/rules', {
   },
 });
 
-export default combine(baseConfig, ignores(['./src/client/**']));
+export default combine(baseConfig, {
+  rules: {
+    'style/max-statements-per-line': ['off'],
+    'ts/no-use-before-define': ['off'],
+  },
+  files: ['./src/client/**'],
+});

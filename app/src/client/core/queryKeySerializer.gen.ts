@@ -3,13 +3,13 @@
 /**
  * JSON-friendly union that mirrors what Pinia Colada can hash.
  */
-export type JsonValue =
-  | null
-  | string
-  | number
-  | boolean
-  | JsonValue[]
-  | { [key: string]: JsonValue };
+export type JsonValue
+  = | null
+    | string
+    | number
+    | boolean
+    | JsonValue[]
+    | { [key: string]: JsonValue };
 
 /**
  * Replacer that converts non-JSON values (bigint, Date, etc.) to safe substitutes.
@@ -37,7 +37,8 @@ export const stringifyToJsonValue = (input: unknown): JsonValue | undefined => {
       return undefined;
     }
     return JSON.parse(json) as JsonValue;
-  } catch {
+  }
+  catch {
     return undefined;
   }
 };
@@ -69,7 +70,8 @@ const serializeSearchParams = (params: URLSearchParams): JsonValue => {
 
     if (Array.isArray(existing)) {
       (existing as string[]).push(value);
-    } else {
+    }
+    else {
       result[key] = [existing, value];
     }
   }

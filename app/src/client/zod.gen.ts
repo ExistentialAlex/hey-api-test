@@ -3,148 +3,148 @@
 import * as z from 'zod';
 
 export const zPostAuthLoginData = z.object({
-    body: z.object({
-        email: z.string(),
-        organisation: z.string()
-    }).optional(),
-    path: z.never().optional(),
-    query: z.never().optional()
+  body: z.object({
+    email: z.string(),
+    organisation: z.string(),
+  }).optional(),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
  * Login Successful
  */
 export const zPostAuthLoginResponse = z.object({
-    message: z.string()
+  message: z.string(),
 });
 
 export const zDeleteSessionData = z.object({
-    body: z.never().optional(),
-    path: z.never().optional(),
-    query: z.never().optional()
+  body: z.never().optional(),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
  * Session Deleted
  */
 export const zDeleteSessionResponse = z.object({
-    message: z.string()
+  message: z.string(),
 });
 
 export const zGetSessionData = z.object({
-    body: z.never().optional(),
-    path: z.never().optional(),
-    query: z.never().optional()
+  body: z.never().optional(),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
  * Public Session Data
  */
 export const zGetSessionResponse = z.object({
-    email: z.string(),
-    name: z.string(),
-    company: z.string(),
-    avatar: z.object({
-        src: z.string(),
-        alt: z.string()
-    }).optional()
+  email: z.string(),
+  name: z.string(),
+  company: z.string(),
+  avatar: z.object({
+    src: z.string(),
+    alt: z.string(),
+  }).optional(),
 });
 
 export const zGetUsersData = z.object({
-    body: z.never().optional(),
-    path: z.never().optional(),
-    query: z.object({
-        page: z.int().gte(1).lte(9007199254740991).optional(),
-        page_size: z.int().gte(5).lte(100).optional(),
-        search: z.string().optional(),
-        sort: z.union([
-            z.string(),
-            z.array(z.string())
-        ]).optional()
-    }).optional()
+  body: z.never().optional(),
+  path: z.never().optional(),
+  query: z.object({
+    page: z.int().gte(1).lte(9007199254740991).optional(),
+    page_size: z.int().gte(5).lte(100).optional(),
+    search: z.string().optional(),
+    sort: z.union([
+      z.string(),
+      z.array(z.string()),
+    ]).optional(),
+  }).optional(),
 });
 
 /**
  * List of Users
  */
 export const zGetUsersResponse = z.object({
-    results: z.array(z.object({
-        id: z.number(),
-        name: z.string(),
-        jobTitle: z.string()
-    })),
-    count: z.number(),
-    page: z.number(),
-    next: z.url().optional(),
-    previous: z.url().optional()
+  results: z.array(z.object({
+    id: z.number(),
+    name: z.string(),
+    jobTitle: z.string(),
+  })),
+  count: z.number(),
+  page: z.number(),
+  next: z.url().optional(),
+  previous: z.url().optional(),
 });
 
 export const zPostUsersData = z.object({
-    body: z.object({
-        name: z.string(),
-        jobTitle: z.string()
-    }).optional(),
-    path: z.never().optional(),
-    query: z.never().optional()
+  body: z.object({
+    name: z.string(),
+    jobTitle: z.string(),
+  }).optional(),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
  * User created successfully
  */
 export const zPostUsersResponse = z.object({
-    id: z.number(),
-    name: z.string(),
-    jobTitle: z.string()
+  id: z.number(),
+  name: z.string(),
+  jobTitle: z.string(),
 });
 
 export const zDeleteUsersIdData = z.object({
-    body: z.never().optional(),
-    path: z.object({
-        id: z.number()
-    }),
-    query: z.never().optional()
+  body: z.never().optional(),
+  path: z.object({
+    id: z.number(),
+  }),
+  query: z.never().optional(),
 });
 
 /**
  * User deleted successfully
  */
 export const zDeleteUsersIdResponse = z.object({
-    id: z.number()
+  id: z.number(),
 });
 
 export const zGetUsersIdData = z.object({
-    body: z.never().optional(),
-    path: z.object({
-        id: z.number()
-    }),
-    query: z.never().optional()
+  body: z.never().optional(),
+  path: z.object({
+    id: z.number(),
+  }),
+  query: z.never().optional(),
 });
 
 /**
  * User Details
  */
 export const zGetUsersIdResponse = z.object({
-    id: z.number(),
-    name: z.string(),
-    jobTitle: z.string()
+  id: z.number(),
+  name: z.string(),
+  jobTitle: z.string(),
 });
 
 export const zPatchUsersIdData = z.object({
-    body: z.object({
-        name: z.string(),
-        jobTitle: z.string()
-    }).optional(),
-    path: z.object({
-        id: z.number()
-    }),
-    query: z.never().optional()
+  body: z.object({
+    name: z.string(),
+    jobTitle: z.string(),
+  }).optional(),
+  path: z.object({
+    id: z.number(),
+  }),
+  query: z.never().optional(),
 });
 
 /**
  * User updated successfully
  */
 export const zPatchUsersIdResponse = z.object({
-    id: z.number(),
-    name: z.string(),
-    jobTitle: z.string()
+  id: z.number(),
+  name: z.string(),
+  jobTitle: z.string(),
 });
