@@ -37,7 +37,6 @@
     "zod-to-json-schema": "3.25.1"
   },
   "devDependencies": {
-    "<project-name>-eslint-config": "workspace:^",
     "@eslint/js": "9.39.2",
     "@hono/swagger-ui": "0.5.3",
     "@hono/vite-build": "1.9.2",
