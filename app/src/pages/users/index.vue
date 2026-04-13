@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui';
 import type { Row } from '@tanstack/vue-table';
-import type { PaginationQuery, User } from 'hey-api-test-schemas';
+import type { User } from 'hey-api-test-schemas';
 import { definePage } from 'unplugin-vue-router/runtime';
 import { watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -71,10 +71,7 @@ const columns: TableColumn<User>[] = [
   },
 ];
 
-const { pageSize, search, sort, pageSizeItems, state, error } = usePagination<
-  User,
-  PaginationQuery
->(getPaginatedUsersQuery());
+const { pageSize, search, sort, pageSizeItems, state, error } = usePagination(getPaginatedUsersQuery());
 
 watch(error, (err) => {
   if (err) {

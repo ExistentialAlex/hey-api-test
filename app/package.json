@@ -17,16 +17,13 @@
     "openapi-ts": "openapi-ts"
   },
   "dependencies": {
-    "<project-name>-i18n": "workspace:^",
-    "<project-name>-schemas": "workspace:^",
-    "<project-name>-types": "workspace:^",
-    "<project-name>-utils": "workspace:^",
     "@internationalized/date": "^3.10.1",
     "@nuxt/ui": "4.3.0",
     "@pinia/colada": "0.21.2",
     "@tanstack/vue-table": "8.21.3",
     "@unhead/vue": "2.0.19",
     "@vueuse/core": "14.1.0",
+    "@vueuse/router": "14.2.1",
     "defu": "6.1.4",
     "destr": "2.0.5",
     "fast-equals": "6.0.0",
@@ -45,7 +42,6 @@
     "zod": "4.3.5"
   },
   "devDependencies": {
-    "<project-name>-eslint-config": "workspace:^",
     "@hey-api/openapi-ts": "0.94.5",
     "@hey-api/vite-plugin": "0.2.1",
     "@intlify/unplugin-vue-i18n": "11.0.3",

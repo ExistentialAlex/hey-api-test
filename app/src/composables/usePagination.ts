@@ -1,34 +1,28 @@
 import type { DefineQueryOptionsTagged, UseQueryOptions } from '@pinia/colada';
-import type { PaginationQuery, PaginationResponse } from 'hey-api-test-schemas';
+import type { PaginationResponse } from 'hey-api-test-schemas';
 import type { ColumnSort } from 'hey-api-test-types';
+import type { Ref } from 'vue';
 import { useQuery } from '@pinia/colada';
-import { useDebounceFn } from '@vueuse/core';
+import { useRouteQuery } from '@vueuse/router';
 import {
-  addProperty,
   convertQuerySortToColumnSort,
   convertSortToQuerySort,
-  filterKeys,
 } from 'hey-api-test-utils';
-import { computed, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { updatePaginatedUrls } from '@/utils';
-import { useQueryParams } from './useQueryParams';
-
-type AdditionalQueries<P> = Omit<P, keyof PaginationQuery>;
-type QueryKey<P> = keyof AdditionalQueries<P>;
+import { useDebouncedRouteQuery } from './useDebouncedRouteQuery.composable';
 
 const defaultPageSize = 25;
 const defaultSearch = '';
-const defaultSort: ColumnSort[] = [];
+const defaultSort: string[] = [];
 
 /**
  * A composable for handling paginated data with query parameter management.
  *
  * @template T The type of items in the paginated result
- * @template P The pagination request schema type (extends PaginationQuerySchema)
  *
- * @param queryKey Unique key for caching the query
- * @param request API endpoint URL
+ * @param definedQuery The Pinia Colada Query to Execute
  * @param options Additional query options
  *
  * @returns Object containing pagination state, controls, and query results
@@ -48,68 +42,22 @@ const defaultSort: ColumnSort[] = [];
  * ```
  */
 
-export const usePagination = <T, P extends PaginationQuery = PaginationQuery>(
+export const usePagination = <T>(
   definedQuery: DefineQueryOptionsTagged<PaginationResponse<T>>,
   options: Partial<UseQueryOptions<PaginationResponse<T>>> = {},
 ) => {
   const route = useRoute();
-  const router = useRouter();
-  const { getQueryParamValue, normalizeQueryParams } = useQueryParams();
 
-  // Extract getter logic into helper functions to avoid duplication
-  const getSearch = () => getQueryParamValue(route, 'search', (v) => (Array.isArray(v) ? '' : v), defaultSearch);
-  const getSort = () => getQueryParamValue(route, 'sort', (v) => convertQuerySortToColumnSort(v), defaultSort);
-  const getPageSize = () => getQueryParamValue(route, 'page_size', (v) => Number(v), defaultPageSize);
-  const getAdditionalQueries = () =>
-    filterKeys(normalizeQueryParams(route.query), [
-      'page_size',
-      'search',
-      'sort',
-      'page',
-    ]) as AdditionalQueries<P>;
-
-  const pushQuery = (
-    params: Partial<{
-      search: string;
-      sort: string[];
-      page_size: string;
-      extraQueries: AdditionalQueries<P>;
-    }>,
-  ) => {
-    const { extraQueries, ...rest } = params;
-
-    let query = addProperty({}, 'search', getSearch(), !!getSearch());
-    query = addProperty(query, 'sort', convertSortToQuerySort(getSort()), !!getSort().length);
-    query = addProperty(query, 'page_size', getPageSize(), !!getPageSize());
-    query = { ...query, ...getAdditionalQueries() };
-
-    router.push({ query: { ...query, ...extraQueries, ...rest } });
-  };
-
+  const search: Ref<string> = useDebouncedRouteQuery('search', defaultSearch, { debounce: 500, mode: 'push' });
+  const sort: Ref<ColumnSort[]> = useRouteQuery('sort', defaultSort as string[], {
+    transform: {
+      get: (v) => convertQuerySortToColumnSort(v),
+      set: (v) => convertSortToQuerySort(v),
+    },
+    mode: 'push',
+  });
+  const pageSize: Ref<number> = useRouteQuery('page_size', defaultPageSize, { transform: Number, mode: 'push' });
   const pageSizeItems = [5, 10, 25, 50, 100];
-  const pageSize = computed({
-    get: getPageSize,
-    set: (v) => pushQuery({ page_size: String(v) }),
-  });
-  const search = computed({
-    get: getSearch,
-    set: useDebounceFn((v) => pushQuery({ search: v }), 500),
-  });
-  const sort = computed({
-    get: getSort,
-    set: (v) => pushQuery({ sort: convertSortToQuerySort(v) }),
-  });
-  const additionalQueries = computed({
-    get: getAdditionalQueries,
-    set: (v) => pushQuery({ extraQueries: v }),
-  });
-
-  // Simple helper to create computed refs for additional query params
-  const useQueryParam = <K extends QueryKey<P>>(key: K) =>
-    computed({
-      get: () => additionalQueries.value[key],
-      set: (value) => (additionalQueries.value = { ...additionalQueries.value, [key]: value }),
-    });
 
   const query = useQuery<PaginationResponse<T>>({
     ...definedQuery,
@@ -123,8 +71,7 @@ export const usePagination = <T, P extends PaginationQuery = PaginationQuery>(
   watch(
     () => route.query,
     () => {
-      // Manually refetch based on changes to the route query.
-      query.refetch();
+      query.refetch(); // Manually refetch based on changes to the route query.
     },
     { deep: true },
   );
@@ -135,6 +82,5 @@ export const usePagination = <T, P extends PaginationQuery = PaginationQuery>(
     sort,
     pageSize,
     pageSizeItems,
-    useQueryParam,
   };
 };
