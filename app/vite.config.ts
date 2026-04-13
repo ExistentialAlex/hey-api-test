@@ -21,18 +21,31 @@ export default defineConfig({
           postProcess: ['eslint'], // Lint the generated files
         },
         plugins: [
-          '@hey-api/typescript',
           {
-            name: '@hey-api/sdk',
-            client: '@hey-api/client-ofetch',
-            validator: true,
+            name: '@hey-api/typescript',
+            enums: 'typescript-const',
+            includeInEntry: true,
           },
-          'zod',
+          {
+            name: 'zod',
+            types: {
+              infer: true,
+            },
+            includeInEntry: true,
+          },
           {
             name: '@hey-api/client-ofetch',
             runtimeConfigPath: '@/core/hey-api.ts',
+            throwOnError: true,
           },
-          '@pinia/colada',
+          {
+            name: '@hey-api/sdk',
+          },
+          {
+            name: '@pinia/colada',
+            queryKeys: true,
+            includeInEntry: true,
+          },
         ],
       },
     }),

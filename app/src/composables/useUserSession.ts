@@ -1,4 +1,5 @@
-import type { User, UserSession } from 'hey-api-test-types';
+import type { Session } from 'hey-api-test-schemas';
+import type { User } from 'hey-api-test-types';
 import type { ComputedRef, Ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
@@ -20,7 +21,7 @@ export interface UserSessionComposable {
   /**
    * The session object.
    */
-  session: Ref<UserSession | null>;
+  session: Ref<Session | null>;
   /**
    * Fetch the user session from the server.
    */

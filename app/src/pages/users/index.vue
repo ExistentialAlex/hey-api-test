@@ -6,6 +6,7 @@ import { definePage } from 'unplugin-vue-router/runtime';
 import { watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import { getPaginatedUsersQuery } from '@/client';
 import PaginatedTable from '@/components/paginated-table.vue';
 import { useConfirmationModal, usePagination, useTable } from '@/composables';
 import { useDeleteUser } from '@/composables/users';
@@ -48,7 +49,7 @@ const getActionItems = (row: Row<User>): DropdownMenuItem[] => [
   },
   {
     'label': t('app.pages.users.list.actions.delete'),
-    'onSelect': () => confirmDelete(deleteUser, { id: String(row.original.id) }),
+    'onSelect': () => confirmDelete(deleteUser, { path: { id: row.original.id } }),
     'icon': 'i-lucide-delete',
     'data-testid': 'user-list:actions:delete',
   },
@@ -70,10 +71,10 @@ const columns: TableColumn<User>[] = [
   },
 ];
 
-const { pageSize, search, sort, error, pageSizeItems, state } = usePagination<
+const { pageSize, search, sort, pageSizeItems, state, error } = usePagination<
   User,
   PaginationQuery
->(['users'], '/users');
+>(getPaginatedUsersQuery());
 
 watch(error, (err) => {
   if (err) {

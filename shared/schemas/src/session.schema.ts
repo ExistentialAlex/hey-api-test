@@ -19,8 +19,12 @@ export const SecureSessionSchema = z.object({
 export type SecureSession = z.infer<typeof SecureSessionSchema>;
 
 export const SessionSchema = z.looseObject({
-  id: z.string(),
   user: UserSessionSchema.optional(),
   secure: SecureSessionSchema.optional(),
 });
 export type Session = z.infer<typeof SessionSchema>;
+
+export const GetSessionResponseSchema = SessionSchema.omit({
+  secure: true,
+});
+export type GetSessionResponse = z.infer<typeof GetSessionResponseSchema>;

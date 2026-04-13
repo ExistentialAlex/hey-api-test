@@ -1,8 +1,9 @@
 import type { FetchHooks } from 'ofetch';
+import type { Ref } from 'vue';
 import type { CreateClientConfig } from '../client/client.gen';
-import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useConfig } from './config';
+import { i18n } from './i18n';
 
 export const createClientConfig: CreateClientConfig = (config) => {
   const { config: appConfig } = useConfig();
@@ -10,7 +11,6 @@ export const createClientConfig: CreateClientConfig = (config) => {
 
   const router = useRouter();
   const toast = useToast();
-  const { t, locale } = useI18n();
 
   const unauthorisedErrorHook: FetchHooks['onResponseError'] = ({ response }) => {
     if (response.status !== 401) {
@@ -18,14 +18,14 @@ export const createClientConfig: CreateClientConfig = (config) => {
     }
 
     toast.add({
-      title: t('app.composables.useFetch.toasts.unauthorised.title'),
-      description: t('app.composables.useFetch.toasts.unauthorised.description'),
+      title: i18n.global.t('app.composables.useFetch.toasts.unauthorised.title'),
+      description: i18n.global.t('app.composables.useFetch.toasts.unauthorised.description'),
     });
     router.push('/login');
   };
 
   const setLocale: FetchHooks['onRequest'] = ({ options }) => {
-    options.headers.set('accept-language', locale.value);
+    options.headers.set('accept-language', (i18n.global.locale as unknown as Ref<string>).value);
   };
 
   return {

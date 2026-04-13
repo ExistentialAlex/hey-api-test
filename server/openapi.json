@@ -89,36 +89,42 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "email": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "company": {
-                      "type": "string"
-                    },
-                    "avatar": {
+                    "user": {
                       "type": "object",
                       "properties": {
-                        "src": {
+                        "email": {
                           "type": "string"
                         },
-                        "alt": {
+                        "name": {
                           "type": "string"
+                        },
+                        "company": {
+                          "type": "string"
+                        },
+                        "avatar": {
+                          "type": "object",
+                          "properties": {
+                            "src": {
+                              "type": "string"
+                            },
+                            "alt": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "src",
+                            "alt"
+                          ]
                         }
                       },
                       "required": [
-                        "src",
-                        "alt"
+                        "email",
+                        "name",
+                        "company"
                       ]
                     }
                   },
-                  "required": [
-                    "email",
-                    "name",
-                    "company"
-                  ]
+                  "additionalProperties": {}
                 }
               }
             }
@@ -155,7 +161,7 @@
     },
     "/users": {
       "get": {
-        "operationId": "getUsers",
+        "operationId": "getPaginatedUsers",
         "description": "Get list of users",
         "tags": [
           "users"
@@ -322,7 +328,7 @@
     },
     "/users/{id}": {
       "get": {
-        "operationId": "getUsers:id",
+        "operationId": "getUsersById",
         "description": "Get user by ID",
         "tags": [
           "users"

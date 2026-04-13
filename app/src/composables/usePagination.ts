@@ -1,4 +1,4 @@
-import type { EntryKey, UseQueryOptions } from '@pinia/colada';
+import type { DefineQueryOptionsTagged, UseQueryOptions } from '@pinia/colada';
 import type { PaginationQuery, PaginationResponse } from 'hey-api-test-schemas';
 import type { ColumnSort } from 'hey-api-test-types';
 import { useQuery } from '@pinia/colada';
@@ -11,7 +11,6 @@ import {
 } from 'hey-api-test-utils';
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useFetch } from '@/core';
 import { updatePaginatedUrls } from '@/utils';
 import { useQueryParams } from './useQueryParams';
 
@@ -50,13 +49,11 @@ const defaultSort: ColumnSort[] = [];
  */
 
 export const usePagination = <T, P extends PaginationQuery = PaginationQuery>(
-  queryKey: EntryKey,
-  request: string,
-  options?: UseQueryOptions<PaginationResponse<T>>,
+  definedQuery: DefineQueryOptionsTagged<PaginationResponse<T>>,
+  options: Partial<UseQueryOptions<PaginationResponse<T>>> = {},
 ) => {
   const route = useRoute();
   const router = useRouter();
-  const { $fetch } = useFetch();
   const { getQueryParamValue, normalizeQueryParams } = useQueryParams();
 
   // Extract getter logic into helper functions to avoid duplication
@@ -115,12 +112,12 @@ export const usePagination = <T, P extends PaginationQuery = PaginationQuery>(
     });
 
   const query = useQuery<PaginationResponse<T>>({
-    key: () => [...queryKey],
-    query: () =>
-      $fetch<PaginationResponse<T>>(request, {
-        query: route.query,
-      }).then(updatePaginatedUrls),
-    ...(options || {}),
+    ...definedQuery,
+    query: (context) => definedQuery.query({
+      ...context,
+      query: route.query,
+    } as any).then(updatePaginatedUrls),
+    ...options,
   });
 
   watch(

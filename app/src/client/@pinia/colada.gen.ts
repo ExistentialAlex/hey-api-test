@@ -3,11 +3,11 @@
 import type { _JSONValue, UseMutationOptions } from '@pinia/colada';
 
 import type { Options } from '../sdk.gen';
-import type { DeleteSessionData, DeleteSessionResponse, DeleteUsersIdData, DeleteUsersIdResponse, GetSessionData, GetSessionResponse, GetUsersData, GetUsersIdData, GetUsersIdResponse, GetUsersResponse, PatchUsersIdData, PatchUsersIdResponse, PostAuthLoginData, PostAuthLoginError, PostAuthLoginResponse, PostUsersData, PostUsersResponse } from '../types.gen';
+import type { DeleteSessionData, DeleteSessionResponse, DeleteUsersIdData, DeleteUsersIdResponse, GetPaginatedUsersData, GetPaginatedUsersResponse, GetSessionData, GetSessionResponse, GetUsersByIdData, GetUsersByIdResponse, PatchUsersIdData, PatchUsersIdResponse, PostAuthLoginData, PostAuthLoginError, PostAuthLoginResponse, PostUsersData, PostUsersResponse } from '../types.gen';
 import { defineQueryOptions } from '@pinia/colada';
 import { serializeQueryKeyValue } from '../client';
 import { client } from '../client.gen';
-import { deleteSession, deleteUsersId, getSession, getUsers, getUsersId, patchUsersId, postAuthLogin, postUsers } from '../sdk.gen';
+import { deleteSession, deleteUsersId, getPaginatedUsers, getSession, getUsersById, patchUsersId, postAuthLogin, postUsers } from '../sdk.gen';
 
 /**
  * Login to the BFF.
@@ -89,15 +89,15 @@ export const getSessionQuery = defineQueryOptions<Options<GetSessionData>, GetSe
   },
 }));
 
-export const getUsersQueryKey = (options?: Options<GetUsersData>) => createQueryKey('getUsers', options);
+export const getPaginatedUsersQueryKey = (options?: Options<GetPaginatedUsersData>) => createQueryKey('getPaginatedUsers', options);
 
 /**
  * Get list of users
  */
-export const getUsersQuery = defineQueryOptions<Options<GetUsersData>, GetUsersResponse, Error>((options?: Options<GetUsersData>) => ({
-  key: getUsersQueryKey(options),
+export const getPaginatedUsersQuery = defineQueryOptions<Options<GetPaginatedUsersData>, GetPaginatedUsersResponse, Error>((options?: Options<GetPaginatedUsersData>) => ({
+  key: getPaginatedUsersQueryKey(options),
   query: async (context) => {
-    const { data } = await getUsers({
+    const { data } = await getPaginatedUsers({
       ...options,
       ...context,
       throwOnError: true,
@@ -134,15 +134,15 @@ export const deleteUsersIdMutation = (options?: Partial<Options<DeleteUsersIdDat
   },
 });
 
-export const getUsersIdQueryKey = (options: Options<GetUsersIdData>) => createQueryKey('getUsersId', options);
+export const getUsersByIdQueryKey = (options: Options<GetUsersByIdData>) => createQueryKey('getUsersById', options);
 
 /**
  * Get user by ID
  */
-export const getUsersIdQuery = defineQueryOptions<Options<GetUsersIdData>, GetUsersIdResponse, Error>((options: Options<GetUsersIdData>) => ({
-  key: getUsersIdQueryKey(options),
+export const getUsersByIdQuery = defineQueryOptions<Options<GetUsersByIdData>, GetUsersByIdResponse, Error>((options: Options<GetUsersByIdData>) => ({
+  key: getUsersByIdQueryKey(options),
   query: async (context) => {
-    const { data } = await getUsersId({
+    const { data } = await getUsersById({
       ...options,
       ...context,
       throwOnError: true,

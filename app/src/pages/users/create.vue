@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import type { CreateUser } from 'hey-api-test-schemas';
+import type { FetchError } from 'ofetch';
+import { useMutation } from '@pinia/colada';
 import { CreateUserSchema } from 'hey-api-test-schemas';
 import { definePage } from 'unplugin-vue-router/runtime';
 import { reactive, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
+import { postUsersMutation } from '@/client/@pinia/colada.gen';
 import { useDiscardChanges } from '@/composables';
-import { useCreateUser } from '@/composables/users';
 
 definePage({
   name: 'create-user',
@@ -19,6 +21,7 @@ definePage({
 
 const router = useRouter();
 const { t } = useI18n();
+const toast = useToast();
 
 const initialModel: CreateUser = {
   name: '',
@@ -27,10 +30,30 @@ const initialModel: CreateUser = {
 const model = reactive<CreateUser>(structuredClone(initialModel));
 
 const form = useTemplateRef('form');
-const { mutateAsync: createUser, state } = useCreateUser(model);
+
+const { mutateAsync: createUser, state } = useMutation({
+  ...postUsersMutation(),
+  onSuccess: async (res) => {
+    toast.add({
+      title: t('app.pages.users.create.toasts.onSuccess.title'),
+      description: t('app.pages.users.create.toasts.onSuccess.description', {
+        name: res.name,
+      }),
+      color: 'success',
+    });
+  },
+  onError: (error) => {
+    toast.add({
+      title: t('app.pages.users.create.toasts.onError.title'),
+      description: (error as FetchError).data,
+      color: 'error',
+    });
+  },
+});
+
 const onSubmit = async () => {
   // Wait for the user to be created.
-  await createUser();
+  await createUser({ body: model });
 
   // If there's an error, we don't want to navigate away.
   if (state.value.error) {

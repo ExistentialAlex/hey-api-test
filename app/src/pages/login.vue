@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { Auth } from 'hey-api-test-schemas';
+import { useMutation } from '@pinia/colada';
 import { AuthSchema } from 'hey-api-test-schemas';
-import { asFetchError, doublet } from 'hey-api-test-utils';
 import { definePage } from 'unplugin-vue-router/runtime';
 import { reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
+import { postAuthLoginMutation } from '@/client/@pinia/colada.gen';
 import { useUserSession } from '@/composables';
-import { useFetch } from '@/core';
 
 definePage({
   name: 'login',
@@ -20,13 +20,12 @@ definePage({
 
 const { fetch: refreshSession } = useUserSession();
 
-const { $fetch } = useFetch();
 const router = useRouter();
 const route = useRoute();
 const toast = useToast();
 const { t } = useI18n();
 
-const credentials = reactive<Partial<Auth>>({
+const credentials = reactive<Auth>({
   email: '',
   organisation: '',
 });
@@ -37,22 +36,18 @@ const organisations = ref([
   'Test Organisation B',
 ]);
 
-const login = async () => {
-  const [err] = await doublet($fetch, '/auth/login', {
-    method: 'POST',
-    body: credentials,
-  });
-
-  if (err) {
-    const fetchError = asFetchError(err);
+const { mutateAsync: authLogin } = useMutation({
+  ...postAuthLoginMutation(),
+  onError: (err) =>
     toast.add({
       title: t('app.pages.login.toasts.login.error'),
-      description: fetchError.data,
+      description: err.message,
       color: 'error',
-    });
-    return;
-  }
+    }),
+});
 
+const login = async () => {
+  await authLogin({ body: credentials });
   await refreshSession();
   router.push((route.query.redirect as string) || '/');
 };
@@ -69,33 +64,18 @@ const login = async () => {
       <UForm class="flex flex-col gap-4" :schema="AuthSchema" :state="credentials" @submit="login">
         <UFormField :label="t('app.pages.login.form.email.label')" name="email" required>
           <UInput
-            v-model="credentials.email"
-            class="w-full"
-            :placeholder="t('app.pages.login.form.email.placeholder')"
+            v-model="credentials.email" class="w-full" :placeholder="t('app.pages.login.form.email.placeholder')"
             data-testid="login-form:email"
           />
         </UFormField>
-        <UFormField
-          :label="t('app.pages.login.form.organisation.label')"
-          name="organisation"
-          required
-          class="flex-1"
-        >
+        <UFormField :label="t('app.pages.login.form.organisation.label')" name="organisation" required class="flex-1">
           <USelect
-            v-model="credentials.organisation"
-            :items="organisations"
-            class="w-full"
-            :placeholder="t('app.pages.login.form.organisation.placeholder')"
-            data-testid="login-form:organisation"
+            v-model="credentials.organisation" :items="organisations" class="w-full"
+            :placeholder="t('app.pages.login.form.organisation.placeholder')" data-testid="login-form:organisation"
           />
         </UFormField>
         <USeparator />
-        <UButton
-          icon="i-lucide-log-in"
-          class="mx-auto"
-          data-testid="login-form:submit"
-          type="submit"
-        >
+        <UButton icon="i-lucide-log-in" class="mx-auto" data-testid="login-form:submit" type="submit">
           {{ t('app.pages.login.form.submit') }}
         </UButton>
       </UForm>

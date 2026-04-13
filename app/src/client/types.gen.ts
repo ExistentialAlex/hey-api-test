@@ -66,19 +66,22 @@ export interface GetSessionResponses {
    * Public Session Data
    */
   200: {
-    email: string;
-    name: string;
-    company: string;
-    avatar?: {
-      src: string;
-      alt: string;
+    user?: {
+      email: string;
+      name: string;
+      company: string;
+      avatar?: {
+        src: string;
+        alt: string;
+      };
     };
+    [key: string]: unknown;
   };
 }
 
 export type GetSessionResponse = GetSessionResponses[keyof GetSessionResponses];
 
-export interface GetUsersData {
+export interface GetPaginatedUsersData {
   body?: never;
   path?: never;
   query?: {
@@ -90,7 +93,7 @@ export interface GetUsersData {
   url: '/users';
 }
 
-export interface GetUsersResponses {
+export interface GetPaginatedUsersResponses {
   /**
    * List of Users
    */
@@ -107,7 +110,7 @@ export interface GetUsersResponses {
   };
 }
 
-export type GetUsersResponse = GetUsersResponses[keyof GetUsersResponses];
+export type GetPaginatedUsersResponse = GetPaginatedUsersResponses[keyof GetPaginatedUsersResponses];
 
 export interface PostUsersData {
   body?: {
@@ -166,7 +169,7 @@ export interface DeleteUsersIdResponses {
 
 export type DeleteUsersIdResponse = DeleteUsersIdResponses[keyof DeleteUsersIdResponses];
 
-export interface GetUsersIdData {
+export interface GetUsersByIdData {
   body?: never;
   path: {
     id: number;
@@ -175,14 +178,14 @@ export interface GetUsersIdData {
   url: '/users/{id}';
 }
 
-export interface GetUsersIdErrors {
+export interface GetUsersByIdErrors {
   /**
    * User not found
    */
   404: unknown;
 }
 
-export interface GetUsersIdResponses {
+export interface GetUsersByIdResponses {
   /**
    * User Details
    */
@@ -193,7 +196,7 @@ export interface GetUsersIdResponses {
   };
 }
 
-export type GetUsersIdResponse = GetUsersIdResponses[keyof GetUsersIdResponses];
+export type GetUsersByIdResponse = GetUsersByIdResponses[keyof GetUsersByIdResponses];
 
 export interface PatchUsersIdData {
   body?: {

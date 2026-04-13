@@ -1,4 +1,4 @@
-import { UserSessionSchema } from 'hey-api-test-schemas';
+import { GetSessionResponseSchema } from 'hey-api-test-schemas';
 import { describeRoute, resolver } from 'hono-openapi';
 import z from 'zod';
 
@@ -13,7 +13,7 @@ export const GetSessionOpenApi = describeRoute({
       description: 'Public Session Data',
       content: {
         'application/json': {
-          schema: resolver(UserSessionSchema),
+          schema: resolver(GetSessionResponseSchema),
         },
       },
     },

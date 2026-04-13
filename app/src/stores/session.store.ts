@@ -1,31 +1,36 @@
-import type { UserSession } from 'hey-api-test-types';
+import type { GetSessionResponse } from '@/client';
+import { useQuery } from '@pinia/colada';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { useFetch } from '@/core';
+import { deleteSession, getSessionQuery } from '@/client';
 
 /**
  * Composable to get back the user session and utils around it.
  */
 export const useSessionStore = defineStore('session', () => {
-  const { $fetch } = useFetch();
-
-  const sessionState = ref<UserSession | null>(null);
+  const sessionState = ref<GetSessionResponse | null>(null);
   const authReadyState = ref(false);
 
-  const clear = async () => {
-    await $fetch('/session', {
-      method: 'DELETE',
-    });
-    sessionState.value = null;
-  };
-
-  const fetch = async () => {
-    sessionState.value = await $fetch<UserSession>('/session', {
+  const { refetch } = useQuery({
+    ...getSessionQuery({
       headers: {
         accept: 'application/json',
       },
       retry: false,
-    }).catch(() => null);
+    }),
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
+
+  const clear = async () => {
+    await deleteSession();
+    sessionState.value = null;
+  };
+
+  const fetch = async () => {
+    sessionState.value = await refetch().then((res) => res.data || null).catch(() => null);
+
     if (!authReadyState.value) {
       authReadyState.value = true;
     }

@@ -6,6 +6,7 @@ import z from 'zod';
  * OpenAPI documentation for User List Endpoint
  */
 export const UserListOpenApi = describeRoute({
+  operationId: 'getPaginatedUsers',
   description: 'Get list of users',
   tags: ['users'],
   responses: {
@@ -24,6 +25,7 @@ export const UserListOpenApi = describeRoute({
  * OpenAPI documentation for Get User Endpoint
  */
 export const GetUserOpenApi = describeRoute({
+  operationId: 'getUsersById',
   description: 'Get user by ID',
   tags: ['users'],
   responses: {

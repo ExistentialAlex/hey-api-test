@@ -1,20 +1,16 @@
 import type { FetchError } from 'ofetch';
 import { useMutation, useQueryCache } from '@pinia/colada';
 import { useI18n } from 'vue-i18n';
-import { useFetch } from '@/core';
+import { deleteUsersIdMutation, getPaginatedUsersQueryKey, getUsersByIdQueryKey } from '@/client/@pinia/colada.gen';
 
 export const useDeleteUser = () => {
-  const { $fetch } = useFetch();
   const toast = useToast();
   const { t } = useI18n();
   const queryCache = useQueryCache();
 
   return useMutation({
-    mutation: async ({ id }: { id: string }) =>
-      $fetch(`/users/${id}`, {
-        method: 'DELETE',
-      }),
-    onSuccess: async (res, { id }) => {
+    ...deleteUsersIdMutation(),
+    onSuccess: async ({ id }) => {
       toast.add({
         title: t('app.composables.users.useDeleteUser.toasts.onSuccess.title'),
         description: t('app.composables.users.useDeleteUser.toasts.onSuccess.description', {
@@ -30,9 +26,9 @@ export const useDeleteUser = () => {
         color: 'error',
       });
     },
-    onSettled: (_, __, vars) => {
-      queryCache.invalidateQueries({ key: ['user-details', vars.id], exact: true }); // Invalidate edit page query
-      queryCache.invalidateQueries({ key: ['users'], exact: true }); // Invalidate list view query
+    onSettled: (_, __, { path }) => {
+      queryCache.invalidateQueries({ key: getUsersByIdQueryKey({ path }), exact: true }); // Invalidate edit page query
+      queryCache.invalidateQueries({ key: getPaginatedUsersQueryKey(), exact: true }); // Invalidate list view query
     },
   });
 };

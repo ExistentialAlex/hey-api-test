@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { CreateUser } from 'hey-api-test-schemas';
-import { CreateUserSchema } from 'hey-api-test-schemas';
+import type { PostUsersData } from '@/client';
 import { useI18n } from 'vue-i18n';
+import { zPostUsersData } from '@/client';
 
-const model = defineModel<Partial<CreateUser>>({ required: true });
+const model = defineModel<Partial<PostUsersData['body']>>({ required: true });
 
 const { t } = useI18n();
 </script>
 
 <template>
-  <UForm :schema="CreateUserSchema.partial()" nested>
+  <UForm v-if="model" :schema="zPostUsersData.shape.body" nested>
     <div class="flex flex-col gap-8">
       <HorizontalFormField
         name="name"

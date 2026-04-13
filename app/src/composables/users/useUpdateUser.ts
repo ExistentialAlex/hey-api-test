@@ -1,29 +1,15 @@
-import type { UpdateUser, User } from 'hey-api-test-schemas';
 import type { FetchError } from 'ofetch';
-import type { MaybeRefOrGetter } from 'vue';
 import { useMutation, useQueryCache } from '@pinia/colada';
-import { toValue } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useFetch } from '@/core';
+import { getPaginatedUsersQueryKey, getUsersByIdQueryKey, patchUsersIdMutation } from '@/client';
 
 export const useUpdateUser = () => {
-  const { $fetch } = useFetch();
   const toast = useToast();
   const { t } = useI18n();
   const queryCache = useQueryCache();
 
   return useMutation({
-    mutation: async ({
-      model,
-      id,
-    }: {
-      model: MaybeRefOrGetter<Partial<UpdateUser>>;
-      id: string;
-    }) =>
-      $fetch<User>(`/users/${id}`, {
-        method: 'PATCH',
-        body: toValue(model),
-      }),
+    ...patchUsersIdMutation(),
     onSuccess: async (res) => {
       toast.add({
         title: t('app.composables.users.useUpdateUser.toasts.onSuccess.title'),
@@ -40,9 +26,9 @@ export const useUpdateUser = () => {
         color: 'error',
       });
     },
-    onSettled: (_, __, vars) => {
-      queryCache.invalidateQueries({ key: ['user-details', vars.id], exact: true }); // Invalidate edit page query
-      queryCache.invalidateQueries({ key: ['users'], exact: true }); // Invalidate list view query
+    onSettled: (_, __, { path }) => {
+      queryCache.invalidateQueries({ key: getUsersByIdQueryKey({ path }), exact: true }); // Invalidate edit page query
+      queryCache.invalidateQueries({ key: getPaginatedUsersQueryKey() }); // Invalidate list view query
     },
   });
 };

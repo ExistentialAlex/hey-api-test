@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import type { UpdateUser } from 'hey-api-test-schemas';
 import type { FetchError } from 'ofetch';
+import type { PatchUsersIdData } from '@/client';
+import { useQuery } from '@pinia/colada';
 import { UpdateUserSchema } from 'hey-api-test-schemas';
 import { definePage } from 'unplugin-vue-router/runtime';
 import { ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
+import { getUsersByIdQuery } from '@/client/@pinia/colada.gen';
 import { useDiscardChanges } from '@/composables';
-import { useGetUser, useUpdateUser } from '@/composables/users';
+import { useUpdateUser } from '@/composables/users';
 
 definePage({
   name: 'edit-user',
@@ -23,7 +25,9 @@ const route = useRoute('edit-user');
 const router = useRouter();
 const { t } = useI18n();
 
-const { error, data } = useGetUser(route.params.id);
+const { error, data } = useQuery(getUsersByIdQuery, () => ({
+  path: { id: Number(route.params.id) },
+}));
 
 watch(error, (err) => {
   if ((err as FetchError).status === 404) {
@@ -45,8 +49,8 @@ watch(error, (err) => {
   router.push({ name: 'user-list' });
 });
 
-const initialModel: Partial<UpdateUser> = {};
-const model = ref<Partial<UpdateUser>>({});
+const initialModel: Partial<PatchUsersIdData['body']> = {};
+const model = ref<Partial<PatchUsersIdData['body']>>({});
 
 watch(data, (data) => {
   initialModel.name = data?.name;
@@ -56,9 +60,9 @@ watch(data, (data) => {
 });
 
 const form = useTemplateRef('form');
-const { mutateAsync: updateAttribute, status } = useUpdateUser();
+const { mutateAsync: updateUser, status } = useUpdateUser();
 const onSubmit = async () => {
-  await updateAttribute({ model: model.value, id: route.params.id });
+  await updateUser({ path: { id: Number(route.params.id) }, body: model.value as PatchUsersIdData['body'] });
 };
 
 const { shouldDiscardChanges } = useDiscardChanges(

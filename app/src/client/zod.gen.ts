@@ -11,6 +11,8 @@ export const zPostAuthLoginData = z.object({
   query: z.never().optional(),
 });
 
+export type PostAuthLoginDataZodType = z.infer<typeof zPostAuthLoginData>;
+
 /**
  * Login Successful
  */
@@ -18,11 +20,15 @@ export const zPostAuthLoginResponse = z.object({
   message: z.string(),
 });
 
+export type PostAuthLoginResponseZodType = z.infer<typeof zPostAuthLoginResponse>;
+
 export const zDeleteSessionData = z.object({
   body: z.never().optional(),
   path: z.never().optional(),
   query: z.never().optional(),
 });
+
+export type DeleteSessionDataZodType = z.infer<typeof zDeleteSessionData>;
 
 /**
  * Session Deleted
@@ -31,26 +37,34 @@ export const zDeleteSessionResponse = z.object({
   message: z.string(),
 });
 
+export type DeleteSessionResponseZodType = z.infer<typeof zDeleteSessionResponse>;
+
 export const zGetSessionData = z.object({
   body: z.never().optional(),
   path: z.never().optional(),
   query: z.never().optional(),
 });
 
+export type GetSessionDataZodType = z.infer<typeof zGetSessionData>;
+
 /**
  * Public Session Data
  */
 export const zGetSessionResponse = z.object({
-  email: z.string(),
-  name: z.string(),
-  company: z.string(),
-  avatar: z.object({
-    src: z.string(),
-    alt: z.string(),
+  user: z.object({
+    email: z.string(),
+    name: z.string(),
+    company: z.string(),
+    avatar: z.object({
+      src: z.string(),
+      alt: z.string(),
+    }).optional(),
   }).optional(),
 });
 
-export const zGetUsersData = z.object({
+export type GetSessionResponseZodType = z.infer<typeof zGetSessionResponse>;
+
+export const zGetPaginatedUsersData = z.object({
   body: z.never().optional(),
   path: z.never().optional(),
   query: z.object({
@@ -64,10 +78,12 @@ export const zGetUsersData = z.object({
   }).optional(),
 });
 
+export type GetPaginatedUsersDataZodType = z.infer<typeof zGetPaginatedUsersData>;
+
 /**
  * List of Users
  */
-export const zGetUsersResponse = z.object({
+export const zGetPaginatedUsersResponse = z.object({
   results: z.array(z.object({
     id: z.number(),
     name: z.string(),
@@ -79,6 +95,8 @@ export const zGetUsersResponse = z.object({
   previous: z.url().optional(),
 });
 
+export type GetPaginatedUsersResponseZodType = z.infer<typeof zGetPaginatedUsersResponse>;
+
 export const zPostUsersData = z.object({
   body: z.object({
     name: z.string(),
@@ -87,6 +105,8 @@ export const zPostUsersData = z.object({
   path: z.never().optional(),
   query: z.never().optional(),
 });
+
+export type PostUsersDataZodType = z.infer<typeof zPostUsersData>;
 
 /**
  * User created successfully
@@ -97,6 +117,8 @@ export const zPostUsersResponse = z.object({
   jobTitle: z.string(),
 });
 
+export type PostUsersResponseZodType = z.infer<typeof zPostUsersResponse>;
+
 export const zDeleteUsersIdData = z.object({
   body: z.never().optional(),
   path: z.object({
@@ -105,6 +127,8 @@ export const zDeleteUsersIdData = z.object({
   query: z.never().optional(),
 });
 
+export type DeleteUsersIdDataZodType = z.infer<typeof zDeleteUsersIdData>;
+
 /**
  * User deleted successfully
  */
@@ -112,7 +136,9 @@ export const zDeleteUsersIdResponse = z.object({
   id: z.number(),
 });
 
-export const zGetUsersIdData = z.object({
+export type DeleteUsersIdResponseZodType = z.infer<typeof zDeleteUsersIdResponse>;
+
+export const zGetUsersByIdData = z.object({
   body: z.never().optional(),
   path: z.object({
     id: z.number(),
@@ -120,14 +146,18 @@ export const zGetUsersIdData = z.object({
   query: z.never().optional(),
 });
 
+export type GetUsersByIdDataZodType = z.infer<typeof zGetUsersByIdData>;
+
 /**
  * User Details
  */
-export const zGetUsersIdResponse = z.object({
+export const zGetUsersByIdResponse = z.object({
   id: z.number(),
   name: z.string(),
   jobTitle: z.string(),
 });
+
+export type GetUsersByIdResponseZodType = z.infer<typeof zGetUsersByIdResponse>;
 
 export const zPatchUsersIdData = z.object({
   body: z.object({
@@ -140,6 +170,8 @@ export const zPatchUsersIdData = z.object({
   query: z.never().optional(),
 });
 
+export type PatchUsersIdDataZodType = z.infer<typeof zPatchUsersIdData>;
+
 /**
  * User updated successfully
  */
@@ -148,3 +180,5 @@ export const zPatchUsersIdResponse = z.object({
   name: z.string(),
   jobTitle: z.string(),
 });
+
+export type PatchUsersIdResponseZodType = z.infer<typeof zPatchUsersIdResponse>;
