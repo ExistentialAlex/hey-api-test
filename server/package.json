@@ -29,7 +29,7 @@
     "hey-api-test-types": "workspace:^",
     "hey-api-test-utils": "workspace:^",
     "hono": "4.11.5",
-    "hono-openapi": "1.1.2",
+    "hono-openapi": "1.3.0",
     "hono-session": "1.2.0",
     "ofetch": "1.5.1",
     "zod": "4.3.5",
